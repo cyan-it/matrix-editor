@@ -1,0 +1,13 @@
+<div class="app-shell">
+  <header class="app-header">
+    <h1>{{ title }}</h1>
+    <p class="app-subtitle">
+      Click a cell to toggle a permission. Use the row / column header checkboxes to toggle an entire row or column,
+      or the top-left checkbox to toggle everything at once.
+    </p>
+  </header>
+
+  <main class="app-main">
+    <app-matrix-editor [config]="config" />
+  </main>
+</div>

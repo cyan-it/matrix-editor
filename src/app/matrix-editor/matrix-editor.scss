@@ -1,0 +1,181 @@
+// ── Constants (must match ROW_HEIGHT / COL_WIDTH in matrix-editor.ts) ──────────
+$row-height:         36px;
+$col-width:          80px;
+$row-header-width:  160px;
+$header-row-height:  96px;  // tall enough for vertical column labels
+
+// ── Scroll host ─────────────────────────────────────────────────────────────────
+.matrix-scroll-host {
+  overflow: auto;
+  max-height: 75vh;
+  max-width: 100%;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  background: #ffffff;
+
+  // Always show scrollbars so the reserved space is stable
+  &::-webkit-scrollbar        { width: 10px; height: 10px; }
+  &::-webkit-scrollbar-track  { background: #f4f5f7; }
+  &::-webkit-scrollbar-thumb  { background: #c1c7d0; border-radius: 5px; }
+}
+
+// ── Table base ───────────────────────────────────────────────────────────────────
+.matrix-table {
+  border-collapse: separate;  // required for position:sticky + borders
+  border-spacing: 0;
+  white-space: nowrap;
+  font-family: system-ui, sans-serif;
+  font-size: 0.8rem;
+}
+
+// ── Shared sticky base ───────────────────────────────────────────────────────────
+%sticky-bg {
+  position: sticky;
+  background: #f0f2f5;
+}
+
+// ── Column header row (thead th) ─────────────────────────────────────────────────
+.header-row th {
+  @extend %sticky-bg;
+  top: 0;
+  z-index: 2;
+  height: $header-row-height;
+  padding: 6px 4px 4px;
+  border-bottom: 2px solid #9aa5b4;
+  border-right: 1px solid #dde1e7;
+  vertical-align: bottom;
+  text-align: center;
+
+  &:last-child { border-right: none; }
+}
+
+// ── Row header column (tbody th) ─────────────────────────────────────────────────
+.row-header {
+  @extend %sticky-bg;
+  left: 0;
+  z-index: 1;
+  width: $row-header-width;
+  min-width: $row-header-width;
+  max-width: $row-header-width;
+  height: $row-height;
+  padding: 0 10px;
+  border-right: 2px solid #9aa5b4;
+  border-bottom: 1px solid #dde1e7;
+  text-align: left;
+}
+
+// ── Corner cell — sticky at BOTH top and left ────────────────────────────────────
+.corner-cell {
+  position: sticky !important;
+  top: 0 !important;
+  left: 0 !important;
+  z-index: 3 !important;                // highest layer
+  width: $row-header-width;
+  min-width: $row-header-width;
+  background: #e4e8ee !important;
+  border-right: 2px solid #9aa5b4 !important;
+  border-bottom: 2px solid #9aa5b4 !important;
+}
+
+// ── Column header cell ───────────────────────────────────────────────────────────
+.col-header {
+  width: $col-width;
+  min-width: $col-width;
+  max-width: $col-width;
+}
+
+.col-label {
+  display: block;
+  writing-mode: vertical-lr;
+  transform: rotate(180deg);
+  max-height: 64px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 600;
+  color: #344054;
+  font-size: 0.75rem;
+  margin-top: 4px;
+}
+
+// ── Row label ────────────────────────────────────────────────────────────────────
+.row-header {
+  display: table-cell; // keep as table-cell (override flex if needed)
+}
+
+.row-label {
+  display: inline-block;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  font-weight: 600;
+  color: #344054;
+  font-size: 0.78rem;
+  margin-left: 6px;
+}
+
+// ── Data cell ────────────────────────────────────────────────────────────────────
+.data-cell {
+  width: $col-width;
+  min-width: $col-width;
+  max-width: $col-width;
+  height: $row-height;
+  padding: 0;
+  text-align: center;
+  border-right: 1px solid #e4e7ec;
+  border-bottom: 1px solid #e4e7ec;
+
+  &:last-child { border-right: none; }
+}
+
+// ── Data row ─────────────────────────────────────────────────────────────────────
+.data-row {
+  height: $row-height;
+
+  &:nth-child(even) {
+    .data-cell, .row-header { background-color: #f8f9fb; }
+  }
+
+  &:hover {
+    .data-cell, .row-header { background-color: #e8f0fe; }
+  }
+}
+
+// ── Virtual spacers — no visual style, just occupy space ────────────────────────
+.v-spacer {
+  padding: 0 !important;
+  border: none !important;
+  background: transparent;
+  overflow: hidden;
+}
+
+// Inner div forces the table cell to honour the exact pixel width
+.spacer-div {
+  display: block;
+  height: 1px;
+  flex-shrink: 0;
+}
+
+.v-spacer-row > td {
+  padding: 0 !important;
+  border: none !important;
+  background: transparent;
+}
+
+// ── Checkbox label (full-cell click target) ──────────────────────────────────────
+.cb-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  min-height: 28px;
+  cursor: pointer;
+
+  input[type='checkbox'] {
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    accent-color: #0d6efd;
+    flex-shrink: 0;
+  }
+}

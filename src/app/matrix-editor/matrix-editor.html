@@ -1,0 +1,103 @@
+<div class="matrix-scroll-host" #scrollHost (scroll)="onScroll($event)">
+  <table class="matrix-table">
+    <thead>
+      <tr class="header-row">
+
+        <!-- Corner cell: sticky at both top and left -->
+        <th class="corner-cell">
+          <label class="cb-label" title="Toggle all">
+            <input
+              type="checkbox"
+              [checked]="isAllChecked()"
+              [indeterminate]="isAllIndeterminate()"
+              (change)="toggleAll($any($event.target).checked)"
+            />
+          </label>
+        </th>
+
+        <!-- Left virtual spacer — represents hidden columns to the left -->
+        @if (leftSpacer() > 0) {
+          <th class="v-spacer"><div [style.width.px]="leftSpacer()" class="spacer-div"></div></th>
+        }
+
+        <!-- Visible column headers -->
+        @for (col of visibleCols(); track col.index) {
+          <th class="col-header">
+            <label class="cb-label" [title]="'Toggle column ' + col.label">
+              <input
+                type="checkbox"
+                [checked]="isColChecked(col.index)"
+                [indeterminate]="isColIndeterminate(col.index)"
+                (change)="toggleColumn(col.index, $any($event.target).checked)"
+              />
+            </label>
+            <span class="col-label">{{ col.label }}</span>
+          </th>
+        }
+
+        <!-- Right virtual spacer -->
+        @if (rightSpacer() > 0) {
+          <th class="v-spacer"><div [style.width.px]="rightSpacer()" class="spacer-div"></div></th>
+        }
+
+      </tr>
+    </thead>
+
+    <tbody>
+
+      <!-- Top virtual spacer row — represents hidden rows above -->
+      @if (topSpacer() > 0) {
+        <tr class="v-spacer-row" [style.height.px]="topSpacer()">
+          <td colspan="9999"></td>
+        </tr>
+      }
+
+      <!-- Only visible rows are in the DOM -->
+      @for (row of visibleRows(); track row.index) {
+        <tr class="data-row">
+
+          <!-- Row header: sticky to the left -->
+          <th class="row-header">
+            <label class="cb-label" [title]="'Toggle row ' + row.label">
+              <input
+                type="checkbox"
+                [checked]="isRowChecked(row.index)"
+                [indeterminate]="isRowIndeterminate(row.index)"
+                (change)="toggleRow(row.index, $any($event.target).checked)"
+              />
+            </label>
+            <span class="row-label">{{ row.label }}</span>
+          </th>
+
+          <!-- Left virtual spacer -->
+          @if (leftSpacer() > 0) {
+            <td class="v-spacer"><div [style.width.px]="leftSpacer()" class="spacer-div"></div></td>
+          }
+
+          <!-- Only visible cells are in the DOM -->
+          @for (col of visibleCols(); track col.index) {
+            <td class="data-cell">
+              <label class="cb-label" [title]="row.label + ' × ' + col.label">
+                <input type="checkbox" [(ngModel)]="cells[row.index][col.index]" />
+              </label>
+            </td>
+          }
+
+          <!-- Right virtual spacer -->
+          @if (rightSpacer() > 0) {
+            <td class="v-spacer"><div [style.width.px]="rightSpacer()" class="spacer-div"></div></td>
+          }
+
+        </tr>
+      }
+
+      <!-- Bottom virtual spacer row — represents hidden rows below -->
+      @if (bottomSpacer() > 0) {
+        <tr class="v-spacer-row" [style.height.px]="bottomSpacer()">
+          <td colspan="9999"></td>
+        </tr>
+      }
+
+    </tbody>
+  </table>
+</div>
